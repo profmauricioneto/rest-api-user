@@ -1,0 +1,32 @@
+
+image:
+  file: .gitpod.dockerfile
+
+tasks: 
+  # starting mysql database
+  - name: mysql
+  - init: |
+      sudo apt-get update
+      sudo apt-get install -y mysql-server
+      sudo service mysql start
+      sudo mysql -e "CREATE USER 'root'@'localhost' IDENTIFIED BY 'root';"
+      sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';"
+      sudo mysql -e "FLUSH PRIVILEGES;"
+      sudo mysql -e "CREATE DATABASE test;"
+      npm install
+  - command: |
+      sudo service mysql start
+      npm start
+
+ports:
+  - port: 3306
+    onOpen: ignore
+  - port: 3000
+    onOpen: open-browser
+
+
+vscode:
+  extensions:
+    - rangav.vscode-thunder-client
+    - ms-azuretools.vscode-docker
+    - xabikos.JavaScriptSnippets
